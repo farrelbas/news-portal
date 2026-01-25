@@ -32,6 +32,8 @@ Route::middleware(['auth.session'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::get('/level', [LevelController::class, 'level'])->name('level');
+    Route::post('/level/store', [LevelController::class, 'store'])->name('level.store');
+    Route::post('/level/delete', [LevelController::class, 'delete'])->name('level.delete');
 
     Route::get('/logout', [AuthController::class, 'logout'])
         ->name('logout');

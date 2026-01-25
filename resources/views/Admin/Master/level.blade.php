@@ -33,13 +33,17 @@
                                         </button>
                                     </div>
                                     <div class="col col-sm-3">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" id=""
-                                                placeholder="Search level name">
-                                            <button class="btn btn-outline-primary" type="sumbit" id="">
-                                                <i class="bx bx-search-alt"></i>
-                                            </button>
-                                        </div>
+                                        <form method="GET" action="{{ route('level') }}">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="search"
+                                                    value="{{ request('search') }}" placeholder="Search level name">
+
+                                                <button class="btn btn-outline-primary" type="submit">
+                                                    <i class="bx bx-search-alt"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+
                                     </div>
                                 </div>
                                 <div class="table-responsive mt-4">
@@ -73,14 +77,15 @@
                                                     <td>
                                                         <button type="button"
                                                             class="btn btn-sm rounded-pill btn-icon btn-warning"
-                                                            onclick="show_modal()" data-bs-toggle="tooltip"
-                                                            data-bs-offset="0,4" data-bs-placement="bottom"
-                                                            data-bs-html="true" data-bs-original-title="Edit Level">
+                                                            onclick="show_modal({{ $row->id_level }}, '{{ $row->level_name }}')"
+                                                            data-bs-toggle="tooltip" data-bs-offset="0,4"
+                                                            data-bs-placement="bottom" data-bs-html="true"
+                                                            data-bs-original-title="Edit Level">
                                                             <span class="tf-icons bx bx-edit"></span>
                                                         </button>
                                                         <button type="button"
                                                             class="btn btn-sm rounded-pill btn-icon btn-danger ms-2"
-                                                            onclick="show_modal_delete({{ json_encode($row) }})"
+                                                            onclick="show_modal_delete({{ $row->id_level }}, '{{ $row->level_name }}')"
                                                             data-bs-toggle="tooltip" data-bs-offset="0,4"
                                                             data-bs-placement="bottom" data-bs-html="true"
                                                             data-bs-original-title="Delete Level">
@@ -102,24 +107,22 @@
                                 <div class="row mt-4 mb-2">
                                     <div class="col-md-1 align-middle d-flex flex-column align-items-md-start">
                                         <div class="btn-group">
-                                            <button type="button" class="btn btn-maroon dropdown-toggle"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                {{ request('sortir') == null ? '10' : request('sortir') }}
+                                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                                data-bs-toggle="dropdown">
+                                                {{ request('sortir', 10) }}
                                             </button>
-                                            <ul class="dropdown-menu" id="listSortir">
-                                                <li class="listAttr" value="10"><a
-                                                        class="dropdown-item {{ request('sortir') == 10 || !request('sortir') ? 'active' : '' }}">10</a>
-                                                </li>
-                                                <li class="listAttr" value="20"><a
-                                                        class="dropdown-item {{ request('sortir') == 20 ? 'active' : '' }}"
-                                                        href="#">20</a></li>
-                                                <li class="listAttr" value="50"><a
-                                                        class="dropdown-item {{ request('sortir') == 50 ? 'active' : '' }}"
-                                                        href="#">50</a></li>
-                                                <li class="listAttr" value="100"><a
-                                                        class="dropdown-item {{ request('sortir') == 100 ? 'active' : '' }}"
-                                                        href="#">100</a></li>
+
+                                            <ul class="dropdown-menu">
+                                                @foreach ([10, 20, 50, 100] as $s)
+                                                    <li>
+                                                        <a class="dropdown-item {{ request('sortir') == $s ? 'active' : '' }}"
+                                                            href="{{ request()->fullUrlWithQuery(['sortir' => $s]) }}">
+                                                            {{ $s }}
+                                                        </a>
+                                                    </li>
+                                                @endforeach
                                             </ul>
+
                                         </div>
                                     </div>
                                     <div class="col-md-5 align-middle d-flex flex-column align-items-md-start mt-2"
@@ -146,30 +149,33 @@
     <div class="modal fade" id="modal_add" tabindex="-1" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row mb-3">
-                        <label class="col-sm-4 col-form-label">Level Name</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="level_name" name="level_name"
-                                placeholder="Insert level name">
+                <form id="form_level" novalidate onsubmit="return save_data();">
+                    @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalCenterTitle">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Level Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="level_name" name="level_name"
+                                    placeholder="Insert level name" required>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <input type="hidden" id="id_level" name="id_level">
+                    <input type="hidden" id="id_level_form" name="id_level">
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="button" class="btn btn-primary" onclick="save_data()">
-                        Save
-                    </button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            Save
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -182,8 +188,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Are you sure want to delete this level?
+                    Are you sure want to delete
+                    <strong id="level_name_delete" class="text-danger"></strong> ?
                 </div>
+
+                <input type="hidden" id="id_level_delete">
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -201,9 +210,69 @@
 @include('Admin.Template.js')
 
 <script>
-    function show_modal() {
+    function show_modal(id = '', name = '') {
+        $('#form_level')[0].reset();
+
+        $('#id_level_form').val(id);
+        $('#level_name').val(name);
+
+        if (id) {
+            $('#modalCenterTitle').text('Edit Level');
+        } else {
+            $('#modalCenterTitle').text('Add Level');
+        }
+
         $('#modal_add').modal('show');
-    };
+    }
+
+    function save_data() {
+        let form = document.getElementById('form_level');
+
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('level.store') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                id_level: $('#id_level_form').val(),
+                level_name: $('#level_name').val()
+            },
+            success: function(res) {
+                if (res.status) {
+                    location.reload();
+                }
+            }
+        });
+
+        return false;
+    }
+
+    function show_modal_delete(id, name) {
+        $('#id_level_delete').val(id);
+        $('#level_name_delete').text(name);
+
+        $('#model_delete').modal('show');
+    }
+
+    function delete_data() {
+        $.ajax({
+            url: "{{ route('level.delete') }}",
+            type: "POST",
+            data: {
+                _token: "{{ csrf_token() }}",
+                id_level: $('#id_level_delete').val()
+            },
+            success: function(res) {
+                if (res.status) {
+                    location.reload();
+                }
+            }
+        });
+    }
 </script>
 
 </html>

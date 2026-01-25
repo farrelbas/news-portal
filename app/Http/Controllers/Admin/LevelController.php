@@ -19,7 +19,12 @@ class LevelController extends Controller
         $search = $request->search;
 
         $data_level = LevelModel::join('tb_user', 'tb_user.id_user', '=', 'tb_level.level_updated_by')
-            ->where('level_softdel', 0);
+            ->select([
+                'tb_level.*',
+                'tb_user.user_fullname'
+            ])
+            ->where('tb_level.level_softdel', 0);
+
 
         if ($search) {
             $data_level->where('level_name', 'LIKE', "%{$search}%");
@@ -32,6 +37,53 @@ class LevelController extends Controller
         return view('Admin.Master.level', [
             'title' => 'Level',
             'data_level' => $data_level,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        if ($request->id_level) {
+
+            LevelModel::where('id_level', $request->id_level)
+                ->where('level_softdel', 0)
+                ->update([
+                    'level_name' => $request->level_name,
+                    'level_last_updated' => now(),
+                    'level_updated_by' => session('id_user'),
+                ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Level berhasil diupdate'
+            ]);
+        }
+
+        LevelModel::create([
+            'level_name' => $request->level_name,
+            'level_softdel' => 0,
+            'level_inserted_at' => now(),
+            'level_inserted_by' => session('id_user'),
+            'level_last_updated' => now(),
+            'level_updated_by' => session('id_user'),
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Level berhasil ditambahkan'
+        ]);
+    }
+
+    public function delete(Request $request)
+    {
+        LevelModel::where('id_level', $request->id_level)->update([
+            'level_softdel'      => 1,
+            'level_last_updated' => date('Y-m-d H:i:s'),
+            'level_updated_by'   => session('id_user'),
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Level berhasil dihapus'
         ]);
     }
 }
