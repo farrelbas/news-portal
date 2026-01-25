@@ -23,7 +23,9 @@
                 @include('Admin.Template.navbar')
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
-
+                        <h5>
+                            Welcome back, {{ session('user_fullname') }}! as {{ session('level_name') }}
+                        </h5>
                     </div>
                     @include('Admin.Template.footer')
                     <div class="content-backdrop fade"></div>

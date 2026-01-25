@@ -115,7 +115,7 @@
                                                             <i class="bx bx-edit"></i>
                                                         </button>
                                                         <button class="btn btn-sm btn-danger"
-                                                            onclick="show_modal_delete({{ $row->id_news }}, @json($row->news_title))">
+                                                            onclick="show_modal_delete({{ $row->id_news }})">
                                                             <i class="bx bx-trash"></i>
                                                         </button>
                                                     </td>
@@ -277,7 +277,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Delete Level</h5>
+                    <h5 class="modal-title" id="modalCenterTitle">Delete News</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <input type="hidden" id="id_news_delete">
@@ -406,7 +406,7 @@
 
     function show_modal_delete(id, title) {
         $('#id_news_delete').val(id);
-        $('#news_title_delete').text(title);
+        // $('#news_title_delete').text(title);
         $('#model_delete').modal('show');
     }
 
