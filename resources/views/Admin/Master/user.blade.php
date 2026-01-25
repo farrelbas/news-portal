@@ -208,7 +208,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label">Level</label>
                             <div class="col-sm-8">
-                                <select id="id_level" name="id_level" class="form-control" required>
+                                <select id="id_level" name="id_level" class="form-control select2" required>
                                     <option value="">-- Choose Level --</option>
                                     @foreach ($data_level as $lvl)
                                         <option value="{{ $lvl->id_level }}">{{ $lvl->level_name }}</option>
@@ -261,6 +261,15 @@
 @include('Admin.Template.js')
 
 <script>
+    $(document).ready(function() {
+        $('#id_level').select2({
+            dropdownParent: $('#modal_add'),
+            width: '100%',
+            placeholder: 'Choose level',
+            allowClear: true
+        });
+    });
+
     function show_modal(id = '', level = '', name = '', username = '', email = '') {
         $('#form_user')[0].reset();
 
@@ -270,6 +279,8 @@
         $('#username').val(username);
         $('#user_email').val(email);
         $('#password').val('');
+
+        $('#id_level').val(level).trigger('change');
 
         if (id == '' || id == null) {
             $('#password').prop('required', true);

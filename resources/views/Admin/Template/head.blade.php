@@ -18,3 +18,44 @@
     href="{{ asset('assets/template-admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
 <link rel="stylesheet" href="{{ asset('assets/template-admin/vendor/libs/apex-charts/apex-charts.css') }}" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .select2-selection__rendered {
+        line-height: 31px !important;
+        padding-top: 2px;
+        color: #697a8d !important;
+    }
+
+    .select2-container--default.select2-container--disabled .select2-selection--single {
+        background-color: #eceef1 ! important;
+        cursor: default;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 39px !important;
+        border-radius: 6px;
+    }
+
+    .select2-container {
+        max-width: 100% !important;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .select2-selection__arrow {
+        height: 34px !important;
+    }
+
+    .select2-selection {
+        border: 1px solid #d9dee3 !important;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__clear {
+        cursor: pointer;
+        float: right;
+        font-weight: bold;
+        height: 36px;
+        margin-right: 28px;
+        padding-right: 0px;
+    }
+</style>

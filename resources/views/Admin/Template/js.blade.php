@@ -8,3 +8,4 @@
 <script src="{{ asset('assets/template-admin/vendor/libs/apex-charts/apexcharts.js') }}"></script>
 <script src="{{ asset('assets/template-admin/js/main.js') }}"></script>
 <script src="{{ asset('assets/template-admin/js/dashboards-analytics.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
