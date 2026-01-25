@@ -13,7 +13,7 @@ class LevelController extends Controller
         date_default_timezone_set('Asia/Jakarta');
     }
 
-    public function level(Request $request)
+    public function index(Request $request)
     {
         $sortir = $request->sortir ?? 10;
         $search = $request->search;
@@ -54,7 +54,7 @@ class LevelController extends Controller
 
             return response()->json([
                 'status' => true,
-                'message' => 'Level berhasil diupdate'
+                'message' => 'Level updated successfully'
             ]);
         }
 
@@ -69,7 +69,7 @@ class LevelController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Level berhasil ditambahkan'
+            'message' => 'Level added successfully'
         ]);
     }
 
@@ -83,7 +83,7 @@ class LevelController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Level berhasil dihapus'
+            'message' => 'Level deleted successfully'
         ]);
     }
 }

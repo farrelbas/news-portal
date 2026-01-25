@@ -63,7 +63,7 @@
             </a>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('level') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('level') || request()->routeIs('user') ? 'active open' : '' }}">
             <a href="" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>Master</div>
@@ -72,12 +72,12 @@
             <ul class="menu-sub">
                 <li class="menu-item {{ request()->routeIs('level') ? 'active' : '' }}">
                     <a href="{{ route('level') }}" class="menu-link">
-                        <div data-i18n="Without menu">Level</div>
+                        <div>Level</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="layouts-without-navbar.html" class="menu-link">
-                        <div data-i18n="Without navbar">User</div>
+                <li class="menu-item {{ request()->routeIs('user') ? 'active' : '' }}">
+                    <a href="{{ route('user') }}" class="menu-link">
+                        <div>User</div>
                     </a>
                 </li>
             </ul>

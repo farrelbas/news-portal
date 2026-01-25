@@ -3,8 +3,10 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Auth\AuthController;
+
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LevelController;
+use App\Http\Controllers\Admin\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +33,14 @@ Route::post('/register-store', [AuthController::class, 'register_store'])->name(
 Route::middleware(['auth.session'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
-    Route::get('/level', [LevelController::class, 'level'])->name('level');
+    Route::get('/level', [LevelController::class, 'index'])->name('level');
     Route::post('/level/store', [LevelController::class, 'store'])->name('level.store');
     Route::post('/level/delete', [LevelController::class, 'delete'])->name('level.delete');
+
+    Route::get('/admin/user', [UserController::class, 'index'])->name('user');
+    Route::post('/admin/user/store', [UserController::class, 'store'])->name('user.store');
+    Route::post('/admin/user/delete', [UserController::class, 'delete'])->name('user.delete');
+
 
     Route::get('/logout', [AuthController::class, 'logout'])
         ->name('logout');
