@@ -25,7 +25,6 @@ class LevelController extends Controller
             ])
             ->where('tb_level.level_softdel', 0);
 
-
         if ($search) {
             $data_level->where('level_name', 'LIKE', "%{$search}%");
         }
