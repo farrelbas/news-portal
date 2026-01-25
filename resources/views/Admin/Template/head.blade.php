@@ -58,4 +58,13 @@
         margin-right: 28px;
         padding-right: 0px;
     }
+
+    .cke_notifications_area {
+        pointer-events: none;
+        display: none;
+    }
+
+    .select2-container--open {
+        z-index: 9999 !important;
+    }
 </style>

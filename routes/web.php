@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LevelController;
 use App\Http\Controllers\Admin\UserController;
 
+use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\NewsCategoryController;
 
 /*
@@ -43,7 +44,9 @@ Route::middleware(['auth.session'])->group(function () {
     Route::post('/user/store', [UserController::class, 'store'])->name('user.store');
     Route::post('/user/delete', [UserController::class, 'delete'])->name('user.delete');
 
-
+    Route::get('/news', [NewsController::class, 'index'])->name('news');
+    Route::post('/news/store', [NewsController::class, 'store'])->name('news.store');
+    Route::post('/news/delete', [NewsController::class, 'delete'])->name('news.delete');
 
     Route::get('/news-category', [NewsCategoryController::class, 'index'])->name('news-category');
     Route::post('/news-category/store', [NewsCategoryController::class, 'store'])->name('news-category.store');

@@ -83,15 +83,15 @@
             </ul>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('level') || request()->routeIs('news-category') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('news') || request()->routeIs('news-category') ? 'active open' : '' }}">
             <a href="" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>News</div>
             </a>
 
             <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('level') ? 'active' : '' }}">
-                    <a href="{{ route('level') }}" class="menu-link">
+                <li class="menu-item {{ request()->routeIs('news') ? 'active' : '' }}">
+                    <a href="{{ route('news') }}" class="menu-link">
                         <div>Data</div>
                     </a>
                 </li>
