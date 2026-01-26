@@ -36,7 +36,7 @@
                                         <form method="GET" action="{{ route('user') }}">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="search"
-                                                    value="{{ request('search') }}" placeholder="Search level name">
+                                                    value="{{ request('search') }}" placeholder="Search user">
 
                                                 <button class="btn btn-outline-primary" type="submit">
                                                     <i class="bx bx-search-alt"></i>

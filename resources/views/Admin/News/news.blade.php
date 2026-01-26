@@ -36,7 +36,7 @@
                                         <form method="GET" action="{{ route('news') }}">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" name="search"
-                                                    value="{{ request('search') }}" placeholder="Search level name">
+                                                    value="{{ request('search') }}" placeholder="Search news">
 
                                                 <button class="btn btn-outline-primary" type="submit">
                                                     <i class="bx bx-search-alt"></i>
@@ -107,15 +107,16 @@
                                                             {{ $row->news_public ? 'Yes' : 'No' }}
                                                         </span>
                                                     </td>
-                                                    <td>{{ date('d F Y H:i', strtotime($row->updated_at)) }}</td>
+                                                    <td>{{ date('d F Y H:i', strtotime($row->news_last_updated)) }}
+                                                    </td>
                                                     <td>{{ $row->user_fullname }}</td>
-                                                    <td>
-                                                        <button class="btn btn-sm btn-warning"
+                                                    <td class="text-nowrap">
+                                                        <button class="btn btn-sm rounded-pill btn-icon btn-warning"
                                                             onclick='show_modal(@json($row))'>
                                                             <i class="bx bx-edit"></i>
                                                         </button>
-                                                        <button class="btn btn-sm btn-danger"
-                                                            onclick="show_modal_delete({{ $row->id_news }})">
+                                                        <button class="btn btn-sm rounded-pill btn-icon btn-danger ms-2"
+                                                            onclick='show_modal_delete(@json($row))'>
                                                             <i class="bx bx-trash"></i>
                                                         </button>
                                                     </td>
@@ -182,6 +183,21 @@
                     </div>
                     <div class="modal-body">
 
+                        <!-- CATEGORY -->
+                        <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label">Category</label>
+                            <div class="col-sm-9">
+                                <select id="id_news_category" name="id_news_category" class="form-control" required>
+                                    <option value="">-- Choose Category --</option>
+                                    @foreach ($news_category as $cat)
+                                        <option value="{{ $cat->id_news_category }}">
+                                            {{ $cat->news_category_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- TITLE -->
                         <div class="row mb-3">
                             <label class="col-sm-3 col-form-label">News Title</label>
@@ -214,22 +230,6 @@
                             </div>
                         </div>
 
-
-                        <!-- CATEGORY -->
-                        <div class="row mb-3">
-                            <label class="col-sm-3 col-form-label">Category</label>
-                            <div class="col-sm-9">
-                                <select id="id_news_category" name="id_news_category" class="form-select" required>
-                                    <option value="">-- Choose Category --</option>
-                                    @foreach ($news_category as $cat)
-                                        <option value="{{ $cat->id_news_category }}">
-                                            {{ $cat->news_category_name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
                         <!-- START DATE -->
                         <div class="row mb-3">
                             <label class="col-sm-3 col-form-label">Start Date</label>
@@ -256,8 +256,9 @@
                                 </label>
                             </div>
                         </div>
-
                     </div>
+
+                    <div id="form_alert" class="alert alert-danger d-none" role="alert"></div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
@@ -335,21 +336,27 @@
         $('#form_news')[0].reset();
         $('#id_news').val('');
         $('#preview_news_picture').hide().attr('src', '');
+        $('#form_alert').addClass('d-none').html('');
+
+        $('#news_picture').prop('required', true);
 
         $('#news_public').prop('checked', true);
         $('#modalCenterTitle').text(data ? 'Edit News' : 'Add News');
 
         $('#modal_add').modal('show');
 
-        $('#modal_add').off('shown.bs.modal').on('shown.bs.modal', function() {
+        $('#modal_add').one('shown.bs.modal', function() {
 
-            // if (!$('#id_news_category').hasClass('select2-hidden-accessible')) {
-            //     $('#id_news_category').select2({
-            //         dropdownParent: $('#modal_add'),
-            //         width: '100%',
-            //         placeholder: 'Choose category'
-            //     });
-            // }
+            if ($('#id_news_category').hasClass('select2-hidden-accessible')) {
+                $('#id_news_category').select2('destroy');
+            }
+
+            $('#id_news_category').select2({
+                dropdownParent: $('#modal_add'),
+                width: '100%',
+                placeholder: 'Choose category',
+                allowClear: true
+            });
 
             $('#id_news_category').val('').trigger('change');
 
@@ -357,6 +364,8 @@
 
             if (data) {
                 $('#id_news').val(data.id_news);
+
+                $('#news_picture').prop('required', false);
 
                 setTimeout(() => {
                     CKEDITOR.instances.news_title.setData(data.news_title || '');
@@ -381,9 +390,37 @@
         });
     }
 
+    function validateForm() {
 
+        let errors = [];
+        let title = CKEDITOR.instances.news_title.getData().trim();
+        let desc = CKEDITOR.instances.news_description.getData().trim();
+
+        if (title == '') {
+            errors.push('News Title is required.');
+        }
+
+        if (desc === '') {
+            errors.push('News Description is required.');
+        }
+
+        if (errors.length > 0) {
+            $('#form_alert')
+                .removeClass('d-none')
+                .html(errors.join('<br>'));
+            return false;
+        }
+
+        $('#form_alert').addClass('d-none').html('');
+        return true;
+    }
 
     function save_data() {
+
+        if (!validateForm()) {
+            return false;
+        }
+
         let formData = new FormData(document.getElementById('form_news'));
 
         formData.set('news_title', CKEDITOR.instances.news_title.getData());
@@ -397,16 +434,26 @@
             processData: false,
             contentType: false,
             success: function(res) {
-                if (res.status) location.reload();
+                if (res.status) {
+                    location.reload();
+                }
             }
         });
 
         return false;
     }
 
-    function show_modal_delete(id, title) {
-        $('#id_news_delete').val(id);
-        // $('#news_title_delete').text(title);
+    function stripHtml(html) {
+        if (!html) return '';
+        return html.replace(/<[^>]*>?/gm, '').trim();
+    }
+
+    function show_modal_delete(data = null) {
+        let cleanTitle = stripHtml(data.news_title);
+
+        $('#id_news_delete').val(data.id_news);
+        $('#news_title_delete').text(cleanTitle);
+
         $('#model_delete').modal('show');
     }
 
@@ -424,6 +471,5 @@
         });
     }
 </script>
-
 
 </html>
