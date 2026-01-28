@@ -50,34 +50,37 @@
                                     <table class="table table-hover">
                                         <thead class="table-secondary">
                                             <tr>
-                                                <th>
+                                                <th class="align-middle">
                                                     No
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Title
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Description
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Category
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Picture
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Date
                                                 </th>
-                                                <th>
-                                                    Available
+                                                <th class="align-middle">
+                                                    Publish
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
+                                                    Views
+                                                </th>
+                                                <th class="align-middle">
                                                     Last Updated
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Updated By
                                                 </th>
-                                                <th>
+                                                <th class="align-middle">
                                                     Action
                                                 </th>
                                             </tr>
@@ -85,31 +88,44 @@
                                         <tbody class="table-border-bottom-0">
                                             @forelse ($data_news as $key => $row)
                                                 <tr>
-                                                    <td>{{ $data_news->firstItem() + $key }}</td>
-                                                    <td>{{ Str::limit(strip_tags($row->news_title), 50) }}</td>
-                                                    <td>{{ Str::limit(strip_tags($row->news_description), 50) }}</td>
-                                                    <td>{{ $row->news_category_name }}</td>
+                                                    <td>
+                                                        {{ $data_news->firstItem() + $key }}
+                                                    </td>
+                                                    <td>
+                                                        {{ Str::limit(strip_tags($row->news_title), 50) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ Str::limit(strip_tags($row->news_description), 50) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $row->news_category_name }}
+                                                    </td>
                                                     <td>
                                                         @if ($row->news_picture)
                                                             <img src="{{ asset('news_picture/' . $row->news_picture) }}"
                                                                 width="60">
                                                         @endif
                                                     </td>
-                                                    <td>
+                                                    <td class="text-nowrap">
                                                         {{ date('d M Y', strtotime($row->news_start_date)) }}
                                                         -
                                                         {{ date('d M Y', strtotime($row->news_end_date)) }}
                                                     </td>
-
                                                     <td>
                                                         <span
                                                             class="badge bg-{{ $row->news_public ? 'success' : 'danger' }}">
                                                             {{ $row->news_public ? 'Yes' : 'No' }}
                                                         </span>
                                                     </td>
-                                                    <td>{{ date('d F Y H:i', strtotime($row->news_last_updated)) }}
+                                                    <td>
+                                                        {{ $row->news_views }}
                                                     </td>
-                                                    <td>{{ $row->user_fullname }}</td>
+                                                    <td>
+                                                        {{ date('d M Y H:i', strtotime($row->news_last_updated)) }}
+                                                    </td>
+                                                    <td>
+                                                        {{ $row->user_fullname }}
+                                                    </td>
                                                     <td class="text-nowrap">
                                                         <button class="btn btn-sm rounded-pill btn-icon btn-warning"
                                                             onclick='show_modal(@json($row))'>

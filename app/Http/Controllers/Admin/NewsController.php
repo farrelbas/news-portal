@@ -51,18 +51,18 @@ class NewsController extends Controller
         ]);
     }
 
-
     public function store(Request $request)
     {
         $data = [
-            'id_news_category'  => $request->id_news_category,
-            'news_title'        => $request->news_title,
-            'news_description'  => $request->news_description,
-            'news_public'       => $request->news_public ?? 1,
-            'news_start_date'   => $request->news_start_date,
-            'news_end_date'     => $request->news_end_date,
+            'id_news_category' => $request->id_news_category,
+            'news_title' => $request->news_title,
+            'news_description' => $request->news_description,
+            'news_public' => $request->news_public ?? 1,
+            'news_start_date' => $request->news_start_date,
+            'news_end_date' => $request->news_end_date,
+            'news_views' => 0,
             'news_last_updated' => now(),
-            'news_updated_by'   => session('id_user'),
+            'news_updated_by' => session('id_user'),
         ];
 
         if ($request->hasFile('news_picture')) {
@@ -84,13 +84,12 @@ class NewsController extends Controller
         return response()->json(['status' => true]);
     }
 
-
     public function delete(Request $request)
     {
         NewsModel::where('id_news', $request->id_news)->update([
-            'news_softdel'       => 1,
+            'news_softdel' => 1,
             'news_last_updated' => now(),
-            'news_updated_by'   => session('id_user'),
+            'news_updated_by' => session('id_user'),
         ]);
 
         return response()->json(['status' => true]);

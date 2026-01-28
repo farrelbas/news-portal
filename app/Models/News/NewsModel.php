@@ -19,6 +19,7 @@ class NewsModel extends Model
         'news_public',
         'news_start_date',
         'news_end_date',
+        'news_views',
         'news_inserted_at',
         'news_inserted_by',
         'news_last_updated',
