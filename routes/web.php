@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\NewsController;
 use App\Http\Controllers\Admin\NewsCategoryController;
 
+use App\Http\Controllers\GeneralUser\DashboardController as GeneralUserDashboardController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,9 +24,7 @@ use App\Http\Controllers\Admin\NewsCategoryController;
 |
 */
 
-Route::get('/', function () {
-    return view('Public/Dashboard/dashboard');
-});
+Route::get('/', [GeneralUserDashboardController::class, 'dashboard'])->name('dashboard.general');
 
 // Auth
 Route::get('/login', [AuthController::class, 'login'])->name('login');
