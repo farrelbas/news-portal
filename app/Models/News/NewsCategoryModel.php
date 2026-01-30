@@ -19,4 +19,20 @@ class NewsCategoryModel extends Model
         'news_category_last_updated',
         'news_category_updated_by',
     ];
+
+    public function news()
+    {
+        return $this->hasMany(NewsModel::class, 'id_news_category', 'id_news_category')
+            ->where('news_public', 1)
+            ->where('news_softdel', 0)
+            ->where(function ($q) {
+                $q->whereNull('news_start_date')
+                    ->orWhere('news_start_date', '<=', now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('news_end_date')
+                    ->orWhere('news_end_date', '>=', now());
+            })
+            ->orderBy('news_inserted_at', 'desc');
+    }
 }

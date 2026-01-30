@@ -5,6 +5,8 @@ namespace App\Http\Controllers\GeneralUser;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use App\Models\News\NewsCategoryModel;
+use App\Models\News\NewsModel;
 
 class DashboardController extends Controller
 {
@@ -17,13 +19,72 @@ class DashboardController extends Controller
     {
         $weather = $this->getWeatherJakarta();
 
+        $categories = NewsCategoryModel::with('news')
+            ->where('news_category_softdel', 0)
+            ->get()
+            ->filter(fn($c) => $c->news->isNotEmpty())
+            ->sortByDesc(fn($c) => $c->news->first()->news_inserted_at)
+            ->take(4);
+
+        $latest_news = NewsModel::with('category')
+            ->where('news_public', 1)
+            ->where('news_softdel', 0)
+            ->where(function ($q) {
+                $q->whereNull('news_start_date')
+                    ->orWhere('news_start_date', '<=', now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('news_end_date')
+                    ->orWhere('news_end_date', '>=', now());
+            })
+            ->orderBy('news_inserted_at', 'desc')
+            ->limit(10)
+            ->get();
+
+        // dd(
+        //     $categories->map(fn($c) => [
+        //         'category' => $c->news_category_name,
+        //         'total_news' => $c->news->count(),
+        //         'latest_news' => optional($c->news->first())->news_title,
+        //     ])
+        // );
+
         return view('Public.Dashboard.dashboard', [
             'title' => 'Dashboard',
             'weather' => $weather,
+            'categories' => $categories,
+            'latest_news' => $latest_news,
         ]);
     }
 
-    private function getWeatherJakarta()
+    public function news_detail($id)
+    {
+        $weather = $this->getWeatherJakarta();
+
+        $news = NewsModel::with('category')
+            ->where('id_news', $id)
+            ->where('news_public', 1)
+            ->where('news_softdel', 0)
+            ->where(function ($q) {
+                $q->whereNull('news_start_date')
+                    ->orWhere('news_start_date', '<=', now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('news_end_date')
+                    ->orWhere('news_end_date', '>=', now());
+            })
+            ->firstOrFail();
+
+        $news->increment('news_views');
+
+        return view('Public.Dashboard.news-detail', [
+            'title' => strip_tags($news->news_title),
+            'weather' => $weather,
+            'news' => $news,
+        ]);
+    }
+
+    public function getWeatherJakarta()
     {
         $apiKey = config('services.openweather.key');
 

@@ -26,4 +26,13 @@ class NewsModel extends Model
         'news_updated_by',
         'news_softdel',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(
+            NewsCategoryModel::class,
+            'id_news_category',
+            'id_news_category'
+        );
+    }
 }

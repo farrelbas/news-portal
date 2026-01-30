@@ -9,7 +9,7 @@
             <nav class="navbar navbar-light navbar-expand-xl">
                 <a href="index.html" class="navbar-brand mt-3">
                     <p class="text-primary display-6 mb-2" style="line-height: 0;">Newsers</p>
-                    <small class="text-body fw-normal" style="letter-spacing: 12px;">Nespaper</small>
+                    <small class="text-body fw-normal" style="letter-spacing: 12px;">Newspaper</small>
                 </a>
                 <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarCollapse">
@@ -27,12 +27,11 @@
                                 </strong>
                                 <div class="d-flex flex-column ms-2" style="width: 160px;">
                                     <span class="text-body">{{ $weather['city'] }}</span>
-                                    <small>{{ $weather['date'] }}</small> 
+                                    <small>{{ $weather['date'] }}</small>
                                 </div>
                             </div>
-                        @else
-                            <small class="text-muted">Weather unavailable</small>
                         @endif
+
                         <a href="{{ route('login') }}">
                             <button class="btn border border-primary btn-md-square rounded-circle bg-white my-auto">
                                 <i class="fas fa-user text-primary"></i>

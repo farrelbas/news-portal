@@ -25,6 +25,7 @@ use App\Http\Controllers\GeneralUser\DashboardController as GeneralUserDashboard
 */
 
 Route::get('/', [GeneralUserDashboardController::class, 'dashboard'])->name('dashboard.general');
+Route::get('/news/{id}', [GeneralUserDashboardController::class, 'news_detail'])->name('news.detail');
 
 // Auth
 Route::get('/login', [AuthController::class, 'login'])->name('login');
