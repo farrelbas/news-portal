@@ -63,7 +63,7 @@
                                         </p>
 
                                         <a href="{{ url('news/' . $news->id_news) }}" class="h6">
-                                            {{ Str::limit($news->news_title, 50) }}
+                                            {{ Str::limit(strip_tags($news->news_title)) }}
                                         </a>
 
                                         <small class="text-body d-block">

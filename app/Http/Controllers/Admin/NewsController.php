@@ -60,7 +60,6 @@ class NewsController extends Controller
             'news_public' => $request->news_public ?? 1,
             'news_start_date' => $request->news_start_date,
             'news_end_date' => $request->news_end_date,
-            'news_views' => 0,
             'news_last_updated' => now(),
             'news_updated_by' => session('id_user'),
         ];
@@ -75,6 +74,7 @@ class NewsController extends Controller
         if ($request->id_news) {
             NewsModel::where('id_news', $request->id_news)->update($data);
         } else {
+            $data['news_views'] = 0;
             $data['news_softdel'] = 0;
             $data['news_inserted_at'] = now();
             $data['news_inserted_by'] = session('id_user');

@@ -31,7 +31,6 @@
                                 </div>
                             </div>
                         @endif
-
                         <a href="{{ route('login') }}">
                             <button class="btn border border-primary btn-md-square rounded-circle bg-white my-auto">
                                 <i class="fas fa-user text-primary"></i>

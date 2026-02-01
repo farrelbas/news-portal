@@ -27,11 +27,11 @@ class NewsCategoryModel extends Model
             ->where('news_softdel', 0)
             ->where(function ($q) {
                 $q->whereNull('news_start_date')
-                    ->orWhere('news_start_date', '<=', now());
+                    ->orWhereDate('news_start_date', '<=', now());
             })
             ->where(function ($q) {
                 $q->whereNull('news_end_date')
-                    ->orWhere('news_end_date', '>=', now());
+                    ->orWhereDate('news_end_date', '>=', now());
             })
             ->orderBy('news_inserted_at', 'desc');
     }

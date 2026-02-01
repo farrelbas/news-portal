@@ -31,11 +31,11 @@ class DashboardController extends Controller
             ->where('news_softdel', 0)
             ->where(function ($q) {
                 $q->whereNull('news_start_date')
-                    ->orWhere('news_start_date', '<=', now());
+                    ->orWhereDate('news_start_date', '<=', now());
             })
             ->where(function ($q) {
                 $q->whereNull('news_end_date')
-                    ->orWhere('news_end_date', '>=', now());
+                    ->orWhereDate('news_end_date', '>=', now());
             })
             ->orderBy('news_inserted_at', 'desc')
             ->limit(10)
@@ -67,20 +67,37 @@ class DashboardController extends Controller
             ->where('news_softdel', 0)
             ->where(function ($q) {
                 $q->whereNull('news_start_date')
-                    ->orWhere('news_start_date', '<=', now());
+                    ->orWhereDate('news_start_date', '<=', now());
             })
             ->where(function ($q) {
                 $q->whereNull('news_end_date')
-                    ->orWhere('news_end_date', '>=', now());
+                    ->orWhereDate('news_end_date', '>=', now());
             })
             ->firstOrFail();
 
         $news->increment('news_views');
 
+        $related_news = NewsModel::where('id_news_category', $news->id_news_category)
+            ->where('id_news', '!=', $news->id_news)
+            ->where('news_public', 1)
+            ->where('news_softdel', 0)
+            ->where(function ($q) {
+                $q->whereNull('news_start_date')
+                    ->orWhereDate('news_start_date', '<=', now());
+            })
+            ->where(function ($q) {
+                $q->whereNull('news_end_date')
+                    ->orWhereDate('news_end_date', '>=', now());
+            })
+            ->orderBy('news_inserted_at', 'desc')
+            ->limit(5)
+            ->get();
+
         return view('Public.Dashboard.news-detail', [
             'title' => strip_tags($news->news_title),
             'weather' => $weather,
             'news' => $news,
+            'related_news' => $related_news,
         ]);
     }
 
