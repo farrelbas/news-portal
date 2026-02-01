@@ -62,28 +62,30 @@
                 <div>Dashboard</div>
             </a>
         </li>
+        @if (session('id_level') == 1)
+            <li class="menu-item {{ request()->routeIs('level') || request()->routeIs('user') ? 'active open' : '' }}">
+                <a href="" class="menu-link menu-toggle">
+                    <i class="menu-icon tf-icons bx bx-layout"></i>
+                    <div>Master</div>
+                </a>
 
-        <li class="menu-item {{ request()->routeIs('level') || request()->routeIs('user') ? 'active open' : '' }}">
-            <a href="" class="menu-link menu-toggle">
-                <i class="menu-icon tf-icons bx bx-layout"></i>
-                <div>Master</div>
-            </a>
+                <ul class="menu-sub">
+                    <li class="menu-item {{ request()->routeIs('level') ? 'active' : '' }}">
+                        <a href="{{ route('level') }}" class="menu-link">
+                            <div>Level</div>
+                        </a>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('user') ? 'active' : '' }}">
+                        <a href="{{ route('user') }}" class="menu-link">
+                            <div>User</div>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        @endif
 
-            <ul class="menu-sub">
-                <li class="menu-item {{ request()->routeIs('level') ? 'active' : '' }}">
-                    <a href="{{ route('level') }}" class="menu-link">
-                        <div>Level</div>
-                    </a>
-                </li>
-                <li class="menu-item {{ request()->routeIs('user') ? 'active' : '' }}">
-                    <a href="{{ route('user') }}" class="menu-link">
-                        <div>User</div>
-                    </a>
-                </li>
-            </ul>
-        </li>
-
-        <li class="menu-item {{ request()->routeIs('news') || request()->routeIs('news-category') ? 'active open' : '' }}">
+        <li
+            class="menu-item {{ request()->routeIs('news') || request()->routeIs('news-category') ? 'active open' : '' }}">
             <a href="" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-layout"></i>
                 <div>News</div>
@@ -95,11 +97,13 @@
                         <div>Data</div>
                     </a>
                 </li>
-                <li class="menu-item {{ request()->routeIs('news-category') ? 'active' : '' }}">
-                    <a href="{{ route('news-category') }}" class="menu-link">
-                        <div>News Category</div>
-                    </a>
-                </li>
+                @if (session('id_level') == 1)
+                    <li class="menu-item {{ request()->routeIs('news-category') ? 'active' : '' }}">
+                        <a href="{{ route('news-category') }}" class="menu-link">
+                            <div>News Category</div>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </li>
     </ul>
